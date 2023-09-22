@@ -24,10 +24,28 @@ namespace net_ef_videogame
 
         public SoftwareHouse(string name,string taxId, string city, string country) 
         {
-            this.Name = name;
+            SetName(name);
             this.TaxId = taxId;
             this.City = city;
             this.Country = country;
+        }
+
+        private void SetName(string name)
+        {
+            if(string.IsNullOrEmpty(name))
+            {
+                throw new ArgumentNullException("Il nome della software house non puo essere vuoto");
+            }
+            this.Name = name;
+        }
+
+        private()
+
+        public override string ToString()
+        {
+            return $@"
+ID: {this.Id} - Name: {this.Name}
+------------";
         }
 
     }

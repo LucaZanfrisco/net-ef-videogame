@@ -1,5 +1,6 @@
 ﻿// See https://aka.ms/new-console-template for more information
 
+using Microsoft.EntityFrameworkCore;
 using net_ef_videogame;
 
 Console.WriteLine("Benvenuto nella gestione di Videogichi");
@@ -130,10 +131,18 @@ Seleziona un numero per svolgere una azione: ");
                     Console.Write("Inserire il nome del videogioco da cancellare: ");
                     string deleteName = Console.ReadLine();
 
-                    List<Videogame> videogames = db.Videogames.Where(videogame => videogame.Name == deleteName).ToList<Videogame>();
-
-                    db.Remove(videogames.FirstOrDefault());
-                    db.SaveChanges();
+                    Videogame videogames = db.Videogames.Where(videogame => videogame.Name == deleteName).FirstOrDefault<Videogame>();
+                    if(videogames != null)
+                    {
+                        Console.WriteLine("Videogioco trovato e cancellato");
+                        db.Remove(videogames);
+                        db.SaveChanges();
+                    }
+                    else
+                    {
+                        Console.WriteLine("Nessun videogioco trovato");
+                    }
+                    
                 }
                 catch(Exception ex)
                 {
@@ -171,9 +180,37 @@ Seleziona un numero per svolgere una azione: ");
             }
             break;
         case 6:
+            using(VideogameContext db = new VideogameContext())
+            {
+                try
+                {
+                    Console.Write("Inserire l'id della software house da cercare: ");
+                    int softwareHouseId = int.Parse(Console.ReadLine());
+                    
+                    List<SoftwareHouse> softwareHouses = db.SoftwareHouses.Where(softwareHouse => softwareHouse.Id == softwareHouseId).Include(softwareHouse => softwareHouse.Videogames).ToList<SoftwareHouse>();
+                    if(softwareHouses.Count > 0)
+                    {
+                        foreach(SoftwareHouse softwareHouse in softwareHouses)
+                        {
+                            Console.WriteLine(softwareHouse.ToString());
+                            Console.WriteLine(softwareHouse.Videogames);
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine($"Nessuna software house con id {softwareHouseId} inserito");
+                    }
+                    
 
+                }catch(Exception ex)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+            }
             break;
         case 7:
+            Console.WriteLine("Arrivederci");
+            check = true;
             break;
         default:
             Console.WriteLine("Il numero inserito non effettua nessuna azione");
