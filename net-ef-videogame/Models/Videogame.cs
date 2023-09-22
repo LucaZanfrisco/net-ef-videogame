@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace net_ef_videogame
+namespace net_ef_videogame.Modelli
 {
     public class Videogame
     {
@@ -22,49 +22,49 @@ namespace net_ef_videogame
 
         public Videogame(long id, string name, string overview, DateTime releaseDate, long softwareHouse)
         {
-            this.Id = id;
+            Id = id;
             SetName(name);
             SetOverview(overview);
-            this.ReleaseDate = releaseDate;
-            this.SoftwareHouseId = softwareHouse;
+            ReleaseDate = releaseDate;
+            SoftwareHouseId = softwareHouse;
         }
 
         public Videogame(string name, string overview, DateTime releaseDate, long softwareHouse)
         {
-            this.Id = 0;
+            Id = 0;
             SetName(name);
             SetOverview(overview);
-            this.ReleaseDate = releaseDate;
-            this.SoftwareHouseId = softwareHouse;
+            ReleaseDate = releaseDate;
+            SoftwareHouseId = softwareHouse;
         }
         public Videogame() { }
         private void SetName(string name)
         {
-            if(string.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(name))
                 throw new Exception("Il nome del videogioco non puo essere vuoto o nullo");
 
-            this.Name = name;
+            Name = name;
         }
 
         private void SetOverview(string overview)
         {
-            if(string.IsNullOrEmpty(overview))
+            if (string.IsNullOrEmpty(overview))
                 throw new Exception("Il contenuto della descrizione non puo essere vuoto o nullo");
 
-            this.Overview = overview;
+            Overview = overview;
         }
 
         public override string ToString()
         {
             return $@"
-{this.Name.ToUpper()} 
+{Name.ToUpper()} 
 
 Descrizione:
 ------------
-{this.Overview}
+{Overview}
 ------------
 
-Data di rilascio: {this.ReleaseDate}
+Data di rilascio: {ReleaseDate}
 ";
         }
     }

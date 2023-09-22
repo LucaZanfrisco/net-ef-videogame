@@ -1,41 +1,19 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using Microsoft.EntityFrameworkCore;
+using net_ef_videogame.Database;
+using net_ef_videogame.Modelli;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-using Microsoft.EntityFrameworkCore;
-using net_ef_videogame;
-
-Console.WriteLine("Benvenuto nella gestione di Videogichi");
-
-
-
-bool check = false;
-
-while(!check)
+namespace net_ef_videogame.Models
 {
-    Console.Write(@"
-==================================MENU==================================
+    public static class VideogameManager
+    {
 
-1 - Inserire un nuovo videogioco
-2 - Ricerca un videogioco per ID
-3 - Ricercare tutti i videogiochi per nome
-4 - Cancellare un videogioco
-5 - Inserire una software house
-6 - Stampare tutti i videogiochi di una software house
-7 - Esci
-
-========================================================================
-Seleziona un numero per svolgere una azione: ");
-    int choice = 0;
-    try
-    {
-        choice = int.Parse(Console.ReadLine());
-    }
-    catch(Exception ex)
-    {
-        Console.WriteLine(ex.Message);
-    }
-    switch(choice)
-    {
-        case 1:
+        public static void AddVideogame()
+        {
             using(VideogameContext db = new VideogameContext())
             {
                 try
@@ -76,21 +54,25 @@ Seleziona un numero per svolgere una azione: ");
                     Console.WriteLine(ex.Message);
                 }
             }
-
-            break;
-        case 2:
+        }
+        public static void SearchVideogameById()
+        {
             using(VideogameContext db = new VideogameContext())
             {
                 try
                 {
-                    Console.Write("Inserire l'id di videogioco da cercare: ");
+                    Console.Write("Inserire l'id del videogioco da cercare: ");
                     int inputId = int.Parse(Console.ReadLine());
 
-                    List<Videogame> videgameById = db.Videogames.Where(videogame => videogame.Id == inputId).ToList<Videogame>();
+                    Videogame videgameById = db.Videogames.Where(videogame => videogame.Id == inputId).FirstOrDefault<Videogame>();
 
-                    foreach(Videogame videogame in videgameById)
+                    if(videgameById != null)
                     {
-                        Console.WriteLine(videogame.ToString());
+                        Console.WriteLine(videgameById.ToString());
+                    }
+                    else
+                    {
+                        Console.WriteLine("Nessun videogame trovato");
                     }
                 }
                 catch(Exception ex)
@@ -99,8 +81,9 @@ Seleziona un numero per svolgere una azione: ");
                 }
 
             }
-            break;
-        case 3:
+        }
+        public static void SearchVideogamaByName()
+        {
             using(VideogameContext db = new VideogameContext())
             {
                 try
@@ -109,11 +92,18 @@ Seleziona un numero per svolgere una azione: ");
                     string inputName = Console.ReadLine();
 
                     List<Videogame> videogameByName = db.Videogames.Where(videogame => videogame.Name == inputName).ToList<Videogame>();
-
-                    foreach(Videogame videogame in videogameByName)
+                    if(videogameByName.Count > 0)
                     {
-                        Console.WriteLine(videogame.ToString());
+                        foreach(Videogame videogame in videogameByName)
+                        {
+                            Console.WriteLine(videogame.ToString());
+                        }
                     }
+                    else
+                    {
+                        Console.WriteLine("Nessun videogame trovato");
+                    }
+                    
                 }
                 catch(Exception ex)
                 {
@@ -121,9 +111,9 @@ Seleziona un numero per svolgere una azione: ");
                 }
 
             }
-
-            break;
-        case 4:
+        }
+        public static void DeleteVideogameByName()
+        {
             using(VideogameContext db = new VideogameContext())
             {
                 try
@@ -142,16 +132,16 @@ Seleziona un numero per svolgere una azione: ");
                     {
                         Console.WriteLine("Nessun videogioco trovato");
                     }
-                    
+
                 }
                 catch(Exception ex)
                 {
                     Console.WriteLine(ex.Message);
                 }
             }
-            break;
-        case 5:
-
+        }
+        public static void AddSoftwareHouse()
+        {
             using(VideogameContext db = new VideogameContext())
             {
                 try
@@ -176,17 +166,18 @@ Seleziona un numero per svolgere una azione: ");
                 {
                     Console.WriteLine(ex.Message);
                 }
-               
+
             }
-            break;
-        case 6:
+        }
+        public static void SearchSoftwareHouseById()
+        {
             using(VideogameContext db = new VideogameContext())
             {
                 try
                 {
                     Console.Write("Inserire l'id della software house da cercare: ");
                     int softwareHouseId = int.Parse(Console.ReadLine());
-                    
+
                     List<SoftwareHouse> softwareHouses = db.SoftwareHouses.Where(softwareHouse => softwareHouse.Id == softwareHouseId).Include(softwareHouse => softwareHouse.Videogames).ToList<SoftwareHouse>();
                     if(softwareHouses.Count > 0)
                     {
@@ -200,22 +191,15 @@ Seleziona un numero per svolgere una azione: ");
                     {
                         Console.WriteLine($"Nessuna software house con id {softwareHouseId} inserito");
                     }
-                    
 
-                }catch(Exception ex)
+
+                }
+                catch(Exception ex)
                 {
                     Console.WriteLine(ex.Message);
                 }
             }
-            break;
-        case 7:
-            Console.WriteLine("Arrivederci");
-            check = true;
-            break;
-        default:
-            Console.WriteLine("Il numero inserito non effettua nessuna azione");
-            break;
+        }
     }
-
 
 }
