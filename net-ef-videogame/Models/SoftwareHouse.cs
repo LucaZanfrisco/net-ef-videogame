@@ -29,7 +29,7 @@ namespace net_ef_videogame.Modelli
             SetCity(city);
             SetCountry(country);
         }
-
+        public SoftwareHouse() { }
         private void SetName(string name)
         {
             if (string.IsNullOrEmpty(name))

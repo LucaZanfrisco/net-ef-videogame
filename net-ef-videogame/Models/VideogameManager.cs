@@ -179,12 +179,16 @@ namespace net_ef_videogame.Models
                     int softwareHouseId = int.Parse(Console.ReadLine());
 
                     List<SoftwareHouse> softwareHouses = db.SoftwareHouses.Where(softwareHouse => softwareHouse.Id == softwareHouseId).Include(softwareHouse => softwareHouse.Videogames).ToList<SoftwareHouse>();
+
                     if(softwareHouses.Count > 0)
                     {
                         foreach(SoftwareHouse softwareHouse in softwareHouses)
                         {
                             Console.WriteLine(softwareHouse.ToString());
-                            Console.WriteLine(softwareHouse.Videogames);
+                            foreach(Videogame videogame in softwareHouse.Videogames)
+                            {
+                                Console.WriteLine(videogame.ToString());
+                            }
                         }
                     }
                     else
