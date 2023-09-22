@@ -22,5 +22,13 @@ namespace net_ef_videogame
         public string Country { get; set; }
         public List<Videogame> Videogames { get; set; }
 
+        public SoftwareHouse(string name,string taxId, string city, string country) 
+        {
+            this.Name = name;
+            this.TaxId = taxId;
+            this.City = city;
+            this.Country = country;
+        }
+
     }
 }
